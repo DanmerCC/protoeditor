@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * g:hover {
+            stroke: black;
+            stroke-width: 5;
+        }
+        
+    </style>
+</head>
+<body>
+    <div>
+        <input type="file" id="uploadFile">
+        <button id="load-button">Cargar</button>
+        <button id="btndownload">Descargar</button>
+    </div>
+    <div id="container">
+    </div>
+    <div id="buffer">
+
+    </div>
+</body>
+<script>
+    var inputUpload = document.getElementById('uploadFile')
+    var buttonLoad = document.getElementById('load-button')
+    var containerNode = document.getElementById('container')
+    var containerBuffer = document.getElementById('buffer')
+    var btndownload = document.getElementById('btndownload')
+    buttonLoad.addEventListener('click',function(){
+        console.log('El valor de inputUpload.files');
+        console.log(inputUpload.files);
+        if(inputUpload.files.length >0){
+            inputUpload.files[0].text().then(x=>{
+                containerNode.innerHTML = x
+                addListerners()
+            })
+        }
+        
+    })
+
+    btndownload.addEventListener('click',function(){
+        downloadInnerHtml('archivo','container','text/html')
+    })
+
+    function addListerners(){
+        var gs = document.querySelectorAll('* g')
+        gs.forEach(g=>{
+            g.addEventListener('click',function(){
+                this.className += "hoverable"
+                console.log(this.className)
+                this.setAttribute('id',prompt('Ingrese el id'))
+            })
+        })
+    }
+
+    function downloadInnerHtml(filename, elId, mimeType) {
+        var elHtml = document.getElementById(elId).innerHTML;
+        var link = document.createElement('a');
+        mimeType = mimeType || 'text/plain';
+
+        link.setAttribute('download', filename);
+        link.setAttribute('href', 'data:' + mimeType  +  ';charset=utf-8,' + encodeURIComponent(elHtml));
+        link.click(); 
+    }
+</script>
+
+</html>
